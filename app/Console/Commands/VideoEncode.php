@@ -29,8 +29,6 @@ class VideoEncode extends Command
     public function handle()
     {
         $lowBitRate = (new X264)->setKiloBitrate(1000);
-        $midBitRate = (new X264)->setKiloBitrate(2500);
-        $highBitRate = (new X264)->setKiloBitrate(5000);
 
         $this->info("Encrypting Video");
 
@@ -38,8 +36,7 @@ class VideoEncode extends Command
             ->open('video.mp4')
             ->exportForHLS()
             ->addFormat($lowBitRate)
-            ->addFormat($midBitRate)
-            ->addFormat($highBitRate)
+            ->setSegmentLength(20)
             ->onProgress(function($progress){
                 $this->info("Encrypting: $progress%");
             })
@@ -47,6 +44,5 @@ class VideoEncode extends Command
             ->save('video.m3u8');
         
         $this->info("Done!");
-        // $this.info("Done!");
     }
 }
